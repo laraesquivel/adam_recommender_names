@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# CPython
+*.pyc
+
+# Virtual environment
+venv/
+env/
+env.bak/
+*.env
+
+# IDEs and editors
+.idea/
+.vscode/
+
+# Dependency directories
+# Usually these are created by package managers
+# e.g. pipenv, poetry, pip, etc.
+/.venv/
+pip-wheel-metadata/

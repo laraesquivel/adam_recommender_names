@@ -1,0 +1,31 @@
+[
+    {
+        "$group" : {
+            "_id": "$relationalName",
+            "relationalNames" : {"$push" : "$name"}
+        }
+    },
+    {
+        "$unwind" : "$relationalNames"
+    },
+    {
+        "$group" : {
+            "_id" : {
+                "n" : "$_id", "relname" : "$relationalNames"
+            },
+            "count" : {"$sum" : 1}
+        }
+    },
+
+    {
+        "$group": {
+            "_id": "$_id.n",
+            "namesCounts": {
+                "$push": {
+                    "name": "$_id.relname",
+                    "count": "$count"
+                }
+            }
+        }
+    }
+]
