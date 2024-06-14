@@ -3,6 +3,9 @@ name: Basic Recommender System
 on: 
     schedule:
     - cron: '0 0 * * 5'  # Executa todas as segundas-feiras às 00:00 UTC
+
+    workflow_dispatch:
+      
 jobs:
   run_function:
     runs-on: ubuntu-latest
