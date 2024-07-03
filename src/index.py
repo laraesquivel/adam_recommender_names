@@ -1,8 +1,11 @@
 import os
 from dotenv import load_dotenv
+from implicit_collaborative_recommender_systyem import ImplicitCollaborativeRecommenderSystem
 
 load_dotenv()
 
 URI = os.getenv('URI')
 
-print('Ola mundo!')
+ImplicitCollaborativeRecommenderSystem.set_URI(URI)
+ImplicitCollaborativeRecommenderSystem.implict_collaborative_recommender_system()
+ImplicitCollaborativeRecommenderSystem.update_recs()
