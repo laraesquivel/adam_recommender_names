@@ -77,6 +77,8 @@ class ImplicitCollaborativeRecommenderSystem:
                     sorted_names.remove(name_to_up)
 
                 sorted_names =  sorted_names[:10]
+                print(name_to_up)
+                print(sorted_names)
                 names_db.update_one({'name' : name_to_up}, {'$set' : {'recommendedNames' : sorted_names}})
 
 
