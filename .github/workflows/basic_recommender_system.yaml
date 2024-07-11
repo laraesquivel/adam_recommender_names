@@ -1,11 +1,10 @@
 name: Basic Recommender System
 
 on: 
-    schedule:
+  schedule:
     - cron: '0 0 * * 5'  # Executa todas as segundas-feiras às 00:00 UTC
+  workflow_dispatch:
 
-    workflow_dispatch:
-      
 jobs:
   run_function:
     runs-on: ubuntu-latest
@@ -25,5 +24,7 @@ jobs:
         pip install -r requirements.txt  # Se houver um arquivo de requisitos
         
     - name: Executar função
+      env:
+        URI: ${{ secrets.MONGO_DB_BABYNAMES_SECRET }}
       run: |
         python src/index.py  # Substitua com o comando para executar sua função
