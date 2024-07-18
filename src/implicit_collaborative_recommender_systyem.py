@@ -19,7 +19,7 @@ class ImplicitCollaborativeRecommenderSystem:
     @classmethod
     def implict_collaborative_recommender_system(cls):
         db = MongoClient(cls.URI)
-        actions_db = db.get_database('dev').get_collection('dev_actions')
+        actions_db = db.get_database('babynames').get_collection('actions')
         actions = actions_db.find({'relationalName' : {'$exists' : True}})
 
         names_list = set({}) #nomes a sofrerem alteracoes 
@@ -59,7 +59,7 @@ class ImplicitCollaborativeRecommenderSystem:
     @classmethod
     def update_recs(cls):
         db = MongoClient(cls.URI)
-        names_db = db.get_database('dev').get_collection('dev_names')
+        names_db = db.get_database('babynames').get_collection('names')
 
 
         for name_to_up, recs_list in cls.names_to_update.items():
