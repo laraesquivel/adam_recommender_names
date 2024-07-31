@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv
-from implicit_collaborative_recommender_systyem import ImplicitCollaborativeRecommenderSystem
+from recommender_system.implicit_collaborative_recommender_systyem import ImplicitCollaborativeRecommenderSystem
 
 load_dotenv()
 
