@@ -20,9 +20,10 @@ class Phrases_Recommender_System:
                     this_user_phrases.append(phrase)
 
             print(this_user_phrases)
+            users.update_one({'_id':user['_id']},
+                             {'$set' : {'phrases' : this_user_phrases}})
+    @classmethod
+    def set_uri(cls,URI):
+        cls.URI = URI
 
-
-URI = 'mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/'
-Phrases_Recommender_System.URI = URI
-Phrases_Recommender_System.generate_recommeder()
 
