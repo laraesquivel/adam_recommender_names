@@ -5,5 +5,5 @@ load_dotenv()
 
 URI = os.getenv('URI')
 
-UserGenerate.URI = URI
+UserGenerate.set_uri(URI)
 UserGenerate.user_generation()
