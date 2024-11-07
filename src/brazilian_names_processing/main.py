@@ -27,7 +27,7 @@ final_df = grouped_df.loc[indices].reset_index(drop=True)
 final_df['genero'] = None
 
 # associate the names to the gender
-for line in range(0, 1000):
+for line in range(0, len(final_df)):
     name = final_df['nome_x'][line]
     try:
         genero = Genero(name)
