@@ -5,8 +5,8 @@ from gender_guesser_br import Genero
 import requests
 
 # Load the data
-data_names = pd.read_csv('br_ibge_nomes_brasil.csv')
-data_locals = pd.read_csv('br_bd_diretorios_brasil_municipio.csv')
+data_names = pd.read_csv('src/brazilian_names_processing/br_ibge_nomes_brasil.csv')
+data_locals = pd.read_csv('src/brazilian_names_processing/br_bd_diretorios_brasil_municipio.csv')
 
 # create table that relates names and locals by the id_municipio
 names_locals_df = pd.merge(data_names, data_locals, on='id_municipio')
@@ -36,5 +36,5 @@ for line in range(0, len(final_df)):
         print(f"Erro ao obter o gênero para o nome '{name}': {e}")
         final_df.loc[line, 'genero'] = 'Indefinido'  # ou use um valor adequado
 
-final_df.to_csv('nomes_locais.csv', sep=',', index=False)
+final_df.to_csv('src/nomes_locais.csv', sep=',', index=False)
 
