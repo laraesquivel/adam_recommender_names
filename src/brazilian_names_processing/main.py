@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np # type: ignore
 import pandas as pd
 from DadosAbertosBrasil import ibge
 from gender_guesser_br import Genero
@@ -36,5 +36,4 @@ for line in range(0, len(final_df)):
         print(f"Erro ao obter o gênero para o nome '{name}': {e}")
         final_df.loc[line, 'genero'] = 'Indefinido'  # ou use um valor adequado
 
-final_df.to_csv('src/nomes_locais.csv', sep=',', index=False)
-
+final_df.to_csv('src/brazilian_names_processing/nomes_locais.csv', sep=',', index=False)
