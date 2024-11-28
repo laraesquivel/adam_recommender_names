@@ -43,13 +43,14 @@ class NewColdStart:
                 if brazilian_name_doc is not None:
                     recommended_names_in_brazilian_names.append(recomended_name)
             
-            
+            ## IR SALVANDO EM UM ARQUIVO JSON PARA IR VISUALIZANDO O PROCESSAMENTO DOS DADOS
+            with open('new_cold_start.json', 'a') as file:
+                json.dump({name: recommended_names_in_brazilian_names}, file)
+                file.write('\n')
+
+        # Fecha a conexão
+        client.close()
                     
-
-
-
-
-
 
 
 
