@@ -44,6 +44,15 @@ class MixingNamesTables:
             else:
                 brazilian_names_collection.update_one({"_id": doc.get('_id')}, {"$set": {"gender": "U"}})
 
+        # Fecha a conexão
+        client.close()
+    
+    def join_collections(cls):
+
+        # Conectando com o MongoDB
+        client = MongoClient(cls.URI)
+        babynames_db = client['babynames']
+    
         # Juntando as duas tabelas de nomes brasileiros e nomes em uma nova coleção tirando os nomes repetidos deixando os da tabela de nomes brasileiros
         # names_collection.aggregate([
         #     {"$lookup": {
@@ -56,7 +65,11 @@ class MixingNamesTables:
         #     {"$out": "new_names"}
         # ])
 
+        # Fecha a conexão
+        client.close()
+
 
 MixingNamesTables.set_URI('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
-MixingNamesTables.process_collections()
-#fazer outra função para só exexutar o comando de juntar as tabelas e não fazer tudo de novo
+
+#MixingNamesTables.process_collections()
+MixingNamesTables.join_collections() #outra função para só exexutar o comando de juntar as tabelas e não fazer tudo de novo

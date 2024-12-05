@@ -31,8 +31,6 @@ class NewColdStart:
             name = line.get('name') # nome principal
             recommended_names = line.get('recommendedNames', []) # array de nomes recomendados
 
-            #print(f"Name: {name}")
-
             # Criar um array para colocar somente os nomes recomendados que estão na coleção de nomes brasileiros
             recommended_names_in_brazilian_names = []
 
@@ -43,9 +41,10 @@ class NewColdStart:
 
                 # Se o nome for encontrado, ele é adicionado na nova recomendação da busca fria
                 if brazilian_name_doc is not None:
+
                     # Verificando se o gênero do nome recomendado é igual ao gênero do nome principal
-                    #if brazilian_name_doc.get('gender')[0] == line.get('gender'):
-                    recommended_names_in_brazilian_names.append(recomended_name)
+                    if brazilian_name_doc.get('gender') == line.get('gender'):
+                        recommended_names_in_brazilian_names.append(recomended_name)
             
             #names_with_new_cold_start[name] = recommended_names_in_brazilian_names
 
