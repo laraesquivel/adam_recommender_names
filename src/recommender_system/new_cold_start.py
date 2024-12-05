@@ -37,7 +37,6 @@ class NewColdStart:
             recommended_names_in_brazilian_names = []
 
             for recomended_name in recommended_names:
-                #print(f"Recomended Name: {recomended_name}")
 
                 # Buscando o nome recomendado na coleção de nomes brasileiros
                 brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": recomended_name})
@@ -45,7 +44,7 @@ class NewColdStart:
                 # Se o nome for encontrado, ele é adicionado na nova recomendação da busca fria
                 if brazilian_name_doc is not None:
                     # Verificando se o gênero do nome recomendado é igual ao gênero do nome principal
-                    #if brazilian_name_doc.get('genero')[0] == line.get('gender'):
+                    #if brazilian_name_doc.get('gender')[0] == line.get('gender'):
                     recommended_names_in_brazilian_names.append(recomended_name)
             
             #names_with_new_cold_start[name] = recommended_names_in_brazilian_names
@@ -58,7 +57,6 @@ class NewColdStart:
         # Fecha a conexão
         client.close()
                     
-
 
 
 NewColdStart.set_URI('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')

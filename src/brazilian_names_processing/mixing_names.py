@@ -45,15 +45,18 @@ class MixingNamesTables:
                 brazilian_names_collection.update_one({"_id": doc.get('_id')}, {"$set": {"gender": "U"}})
 
         # Juntando as duas tabelas de nomes brasileiros e nomes em uma nova coleção tirando os nomes repetidos deixando os da tabela de nomes brasileiros
-        names_collection.aggregate([
-            {"$lookup": {
-                "from": "brazilianNames",
-                "localField": "name",
-                "foreignField": "nome_x",
-                "as": "names"
-            }},
-            {"$unwind": "$names"},
-            {"$out": "new_names"}
-        ])
+        # names_collection.aggregate([
+        #     {"$lookup": {
+        #         "from": "brazilianNames",
+        #         "localField": "name",
+        #         "foreignField": "nome_x",
+        #         "as": "names"
+        #     }},
+        #     {"$unwind": "$names"},
+        #     {"$out": "new_names"}
+        # ])
 
 
+MixingNamesTables.set_URI('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
+MixingNamesTables.process_collections()
+#fazer outra função para só exexutar o comando de juntar as tabelas e não fazer tudo de novo
