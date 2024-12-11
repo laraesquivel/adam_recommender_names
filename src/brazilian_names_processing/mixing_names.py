@@ -52,6 +52,41 @@ class MixingNamesTables:
         # Conectando com o MongoDB
         client = MongoClient(cls.URI)
         babynames_db = client['babynames']
+
+        # Conecção com as coleções
+        names_collection = babynames_db['names']
+        brazilian_names_collection = babynames_db['brazilianNames']
+
+        # Criando a nova coleção para a junção das duas outras
+        try:
+            babynames_db.create_collection("newNames")
+            #print("Coleção criada com sucesso!")
+        except Exception as e:
+            print(f"Erro ao criar coleção: {e}")
+
+        new_names = babynames_db['newNames']
+
+        # Adicionando os nomes (documentos) na nova coleção
+        for doc in names_collection:
+            name = doc.get('name')
+            brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": name})
+
+            if brazilian_name_doc is not None:
+                new_names.insert_one({
+                    "name": name,
+                    "searchCount": 
+                    "femaleCount": 
+                    "maleCount": 
+                    "origin": 
+                    "meaning": 
+                    "brazilian_region": 
+                    "gender": 
+                    "quantity_births_until_2010": 
+                    "recommendedNames": 
+                })
+
+        # Feche a conexão
+        client.close()
     
         # Juntando as duas tabelas de nomes brasileiros e nomes em uma nova coleção tirando os nomes repetidos deixando os da tabela de nomes brasileiros
         # names_collection.aggregate([
