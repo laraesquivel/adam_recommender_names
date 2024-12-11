@@ -46,7 +46,8 @@ class MixingNamesTables:
 
         # Fecha a conexão
         client.close()
-    
+
+    @classmethod
     def join_collections(cls):
 
         # Conectando com o MongoDB
@@ -68,8 +69,9 @@ class MixingNamesTables:
 
         # Adicionando os nomes (documentos) na nova coleção
 
+
         # Percorrendo toda a tabela de nomes antigos, verificando se o nome existe na tabela de nomes brasileiros e mesclando as informações das duas tabelas
-        for doc in names_collection:
+        for doc in names_collection.find():
             name = doc.get('name')
             brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": name})
 
@@ -101,7 +103,7 @@ class MixingNamesTables:
                 })
 
         # Perorrendo a tabela de nomes brasileiros para acrescentar os nomes que não foram adicionados por não estarem na tabela de nomes antigos
-        for br_doc in brazilian_names_collection:
+        for br_doc in brazilian_names_collection.find():
             br_name = br_doc.get('nome_x')
             name_doc = names_collection.find_one({"name": br_name})
 
@@ -121,22 +123,6 @@ class MixingNamesTables:
 
         # Feche a conexão
         client.close()
-    
-        # Juntando as duas tabelas de nomes brasileiros e nomes em uma nova coleção tirando os nomes repetidos deixando os da tabela de nomes brasileiros
-        # names_collection.aggregate([
-        #     {"$lookup": {
-        #         "from": "brazilianNames",
-        #         "localField": "name",
-        #         "foreignField": "nome_x",
-        #         "as": "names"
-        #     }},
-        #     {"$unwind": "$names"},
-        #     {"$out": "new_names"}
-        # ])
-
-        # Fecha a conexão
-        client.close()
-
 
 MixingNamesTables.set_URI('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
 
