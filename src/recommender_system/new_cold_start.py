@@ -56,10 +56,13 @@ class NewColdStart:
             # Preencher as listas de nomes recomendados ue faltam nomes com a lista de nomes mais populares
             while len(recommended_names_in_brazilian_names) < 10:
                 if genero == 'F':
-                    # random_name = random.choice(popular_names[''].values)
+                    random_name_F = random.choice(popular_names['FEMININOS 60'].values)
+                    print(random_name_F)
                     # if random_name not in recommended_names_in_brazilian_names:
                     #     recommended_names_in_brazilian_names.append(random_name)
                 elif genero == 'M':
+                    random_name_M = random.choice(popular_names['MASCULINOS 60'].values)
+                    print(random_name_M)
                 
 
             # Salvar os dados da nova busca fria em um arquivo JSON
