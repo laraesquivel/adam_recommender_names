@@ -108,14 +108,14 @@ class MixingNamesTables:
             if name_doc is None:
                 new_names.insert_one({
                     "name": br_name,
-                    "searchCount": 
-                    "femaleCount": 
-                    "maleCount": doc.get('maleCount'),
-                    "origin": doc.get('origin'),
-                    "meaning": doc.get('meaning'),
-                    "brazilian_region": brazilian_name_doc.get('nome_regiao'),
-                    "gender": brazilian_name_doc.get('gender'),
-                    "quantity_births_until_2010": brazilian_name_doc.get('quantidade_nascimentos_ate_2010'),
+                    "searchCount": 0,
+                    "femaleCount": 0,
+                    "maleCount": 0,
+                    "origin": "",
+                    "meaning": "",
+                    "brazilian_region": br_doc.get('nome_regiao'),
+                    "gender": br_doc.get('gender'),
+                    "quantity_births_until_2010": br_doc.get('quantidade_nascimentos_ate_2010'),
                     "recommendedNames": [],
                 })
 
