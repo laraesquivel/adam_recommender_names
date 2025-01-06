@@ -71,55 +71,57 @@ class MixingNamesTables:
 
 
         # Percorrendo toda a tabela de nomes antigos, verificando se o nome existe na tabela de nomes brasileiros e mesclando as informações das duas tabelas
-        for doc in names_collection.find():
-            name = doc.get('name')
-            brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": name})
+        with names_collection.find(no_cursor_timeout=True) as cursor:
+            for doc in cursor:
+                name = doc.get('name')
+                brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": name})
 
-            if brazilian_name_doc is not None:
-                new_names.insert_one({
-                    "name": name,
-                    "searchCount": doc.get('searchCount'),
-                    "femaleCount": doc.get('femaleCount'),
-                    "maleCount": doc.get('maleCount'),
-                    "origin": doc.get('origin'),
-                    "meaning": doc.get('meaning'),
-                    "brazilian_region": brazilian_name_doc.get('nome_regiao'),
-                    "gender": brazilian_name_doc.get('gender'),
-                    "quantity_births_until_2010": brazilian_name_doc.get('quantidade_nascimentos_ate_2010'),
-                    "recommendedNames": [],
-                })
-            else:
-                new_names.insert_one({
-                    "name": name,
-                    "searchCount": doc.get('searchCount'),
-                    "femaleCount": doc.get('femaleCount'),
-                    "maleCount": doc.get('maleCount'),
-                    "origin": doc.get('origin'),
-                    "meaning": doc.get('meaning'),
-                    "brazilian_region": doc.get('brazilian_region'),
-                    "gender": doc.get('gender'),
-                    "quantity_births_until_2010": doc.get('quantity_births_until_2010'),
-                    "recommendedNames": [],
-                })
+                if brazilian_name_doc is not None:
+                    new_names.insert_one({
+                        "name": name,
+                        "searchCount": doc.get('searchCount'),
+                        "femaleCount": doc.get('femaleCount'),
+                        "maleCount": doc.get('maleCount'),
+                        "origin": doc.get('origin'),
+                        "meaning": doc.get('meaning'),
+                        "brazilian_region": brazilian_name_doc.get('nome_regiao'),
+                        "gender": brazilian_name_doc.get('gender'),
+                        "quantity_births_until_2010": brazilian_name_doc.get('quantidade_nascimentos_ate_2010'),
+                        "recommendedNames": [],
+                    })
+                else:
+                    new_names.insert_one({
+                        "name": name,
+                        "searchCount": doc.get('searchCount'),
+                        "femaleCount": doc.get('femaleCount'),
+                        "maleCount": doc.get('maleCount'),
+                        "origin": doc.get('origin'),
+                        "meaning": doc.get('meaning'),
+                        "brazilian_region": doc.get('brazilian_region'),
+                        "gender": doc.get('gender'),
+                        "quantity_births_until_2010": doc.get('quantity_births_until_2010'),
+                        "recommendedNames": [],
+                    })
 
         # Perorrendo a tabela de nomes brasileiros para acrescentar os nomes que não foram adicionados por não estarem na tabela de nomes antigos
-        for br_doc in brazilian_names_collection.find():
-            br_name = br_doc.get('nome_x')
-            name_doc = names_collection.find_one({"name": br_name})
+        with brazilian_names_collection.find(no_cursor_timeout=True) as cursor:
+            for br_doc in brazilian_names_collection.find():
+                br_name = br_doc.get('nome_x')
+                name_doc = names_collection.find_one({"name": br_name})
 
-            if name_doc is None:
-                new_names.insert_one({
-                    "name": br_name,
-                    "searchCount": 0,
-                    "femaleCount": 0,
-                    "maleCount": 0,
-                    "origin": "",
-                    "meaning": "",
-                    "brazilian_region": br_doc.get('nome_regiao'),
-                    "gender": br_doc.get('gender'),
-                    "quantity_births_until_2010": br_doc.get('quantidade_nascimentos_ate_2010'),
-                    "recommendedNames": [],
-                })
+                if name_doc is None:
+                    new_names.insert_one({
+                        "name": br_name,
+                        "searchCount": 0,
+                        "femaleCount": 0,
+                        "maleCount": 0,
+                        "origin": "",
+                        "meaning": "",
+                        "brazilian_region": br_doc.get('nome_regiao'),
+                        "gender": br_doc.get('gender'),
+                        "quantity_births_until_2010": br_doc.get('quantidade_nascimentos_ate_2010'),
+                        "recommendedNames": [],
+                    })
 
         # Feche a conexão
         client.close()
