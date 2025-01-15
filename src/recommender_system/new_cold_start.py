@@ -28,7 +28,7 @@ class NewColdStart:
         # Selecionando o array de nomes para refazer a busca fria
         names_doc = names_collection.find({}, {"name": 1, "recommendedNames": 1, "gender": 1})
 
-
+        
         # Percorrendo as linhas da coleção para depois percorrer o array de nomes recomendados
         for line in names_doc:
             name = line.get('name') # nome principal
@@ -120,8 +120,9 @@ class NewColdStart:
                 json.dump({name: recommended_names_in_brazilian_names}, file, ensure_ascii=False, indent=4)
                 file.write('\n')
 
-        # Fecha a conexão
+        # Fecha a conexão e o arquivo
         client.close()
+        file.close()
 
     @classmethod
     def brazilian_names_cold_start(cls):
@@ -148,10 +149,22 @@ class NewColdStart:
                     registro['recommendedNames'].append(random_name)
                 else:
                     continue
-        
-        with open('names_without_cold_start', 'w') as file:
-            json.dump(cls.names_and_recommendations, file, indent=4)
+                
+            # Atualize o documento no banco com os nomes recomendados
+            names.update_one(
+                {"_id": registro['_id']},
+                {"$set": {"recommendedNames": registro['recommendedNames']}}
+            )
 
+            # Salvar os dados da nova busca fria em um arquivo JSON
+            with open('new_cold_start.json', 'a', encoding="utf-8") as file:
+                json.dump({registro['name']: registro['recommendedNames']}, file, ensure_ascii=False, indent=4)
+                file.write('\n')
+
+        # Fecha a conexão e o arquivo
+        client.close()
+        file.close()        
+        
 
 NewColdStart.set_URI('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
 NewColdStart.process_collections()
