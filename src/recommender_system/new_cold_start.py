@@ -140,7 +140,7 @@ class NewColdStart:
                 })
         
         for registro in names_withou_recs:
-            print(registro['name'])
+            print("\nNomes Brasileiros\n")
 
             # Preenchendo a lista de nomes recomendados com os nomes brasileiros aleatórios da coleção
             while len(registro['recommendedNames']) < 10:
@@ -164,7 +164,7 @@ class NewColdStart:
         # Fecha a conexão e o arquivo
         client.close()
         file.close()        
-        
+
 
 NewColdStart.set_URI('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
 NewColdStart.process_collections()
