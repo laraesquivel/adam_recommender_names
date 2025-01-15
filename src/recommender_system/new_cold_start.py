@@ -31,59 +31,78 @@ class NewColdStart:
         
         # Percorrendo as linhas da coleção para depois percorrer o array de nomes recomendados
         for line in names_doc:
-            name = line.get('name') # nome principal
-            recommended_names = line.get('recommendedNames', []) # array de nomes recomendados
-            genero = line.get('gender') # gênero do nome principal
+            try:
+                name = line.get('name') # nome principal
+                recommended_names = line.get('recommendedNames', []) # array de nomes recomendados
+                genero = line.get('gender') # gênero do nome principal
 
-            # Criar um array para colocar somente os nomes recomendados que estão na coleção de nomes brasileiros
-            recommended_names_in_brazilian_names = []
+                # Criar um array para colocar somente os nomes recomendados que estão na coleção de nomes brasileiros
+                recommended_names_in_brazilian_names = []
 
-            for recomended_name in recommended_names:
+                for recomended_name in recommended_names:
 
-                # Buscando o nome recomendado na coleção de nomes brasileiros
-                brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": recomended_name})
+                    # Buscando o nome recomendado na coleção de nomes brasileiros
+                    brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": recomended_name})
 
-                # Se o nome for encontrado, ele é adicionado na nova recomendação da busca fria
-                if brazilian_name_doc is not None:
-                    
-                    # Verificando se o gênero do nome recomendado é igual ao gênero do nome principal
-                    if brazilian_name_doc.get('gender') == genero or genero == 'U':
-                        recommended_names_in_brazilian_names.append(recomended_name)
-            
+                    # Se o nome for encontrado, ele é adicionado na nova recomendação da busca fria
+                    if brazilian_name_doc is not None:
+                        
+                        # Verificando se o gênero do nome recomendado é igual ao gênero do nome principal
+                        if brazilian_name_doc.get('gender') == genero or genero == 'U':
+                            recommended_names_in_brazilian_names.append(recomended_name)
+                
 
-            # Preencher as listas de nomes recomendados que faltam nomes com a lista de nomes mais populares
-            int = 0 # Variável para controlar a década de onde será escolhido o nome
-            if genero == 'F': # Se o gênero do nome principal for feminino
-                # Enquanto a lista de nomes recomendados não tiver 10 nomes
-                while len(recommended_names_in_brazilian_names) < 10:
-                    if int == 0:
-                        random_name_F = random.choice(popular_names['FEMININOS 60'].values)
-                    elif int == 1:
-                        random_name_F = random.choice(popular_names['FEMININOS 70'].values)
-                    elif int == 2:
-                        random_name_F = random.choice(popular_names['FEMININOS 80'].values)
-                    elif int == 3:
-                        random_name_F = random.choice(popular_names['FEMININOS 90'].values)
-                    elif int >= 4:
-                        random_name_F = random.choice(popular_names['FEMININOS 2000'].values)
-                    int += 1
+                # Preencher as listas de nomes recomendados que faltam nomes com a lista de nomes mais populares
+                int = 0 # Variável para controlar a década de onde será escolhido o nome
+                if genero == 'F': # Se o gênero do nome principal for feminino
+                    # Enquanto a lista de nomes recomendados não tiver 10 nomes
+                    while len(recommended_names_in_brazilian_names) < 10:
+                        if int == 0:
+                            random_name_F = random.choice(popular_names['FEMININOS 60'].values)
+                        elif int == 1:
+                            random_name_F = random.choice(popular_names['FEMININOS 70'].values)
+                        elif int == 2:
+                            random_name_F = random.choice(popular_names['FEMININOS 80'].values)
+                        elif int == 3:
+                            random_name_F = random.choice(popular_names['FEMININOS 90'].values)
+                        elif int >= 4:
+                            random_name_F = random.choice(popular_names['FEMININOS 2000'].values)
+                        int += 1
 
-                    # Adicionando o nome recomendado na lista de nomes recomendados
-                    if random_name_F not in recommended_names_in_brazilian_names:
-                        recommended_names_in_brazilian_names.append(random_name_F)
-                    else:
-                        continue # Se o nome já estiver na lista, ele é ignorado
+                        # Adicionando o nome recomendado na lista de nomes recomendados
+                        if random_name_F not in recommended_names_in_brazilian_names:
+                            recommended_names_in_brazilian_names.append(random_name_F)
+                        else:
+                            continue # Se o nome já estiver na lista, ele é ignorado
 
-            elif genero == 'M': # Se o gênero do nome principal for masculino
+                elif genero == 'M': # Se o gênero do nome principal for masculino
+                        while len(recommended_names_in_brazilian_names) < 10:
+                            if int == 0:
+                                random_name_M = random.choice(popular_names['MASCULINOS 60'].values)
+                            elif int == 1:
+                                random_name_M = random.choice(popular_names['MASCULINOS 70'].values)
+                            elif int == 2:
+                                random_name_M = random.choice(popular_names['MASCULINOS 80'].values)
+                            elif int == 3:
+                                random_name_M = random.choice(popular_names['MASCULINOS 90'].values)
+                            elif int >= 4:
+                                random_name_M = random.choice(popular_names['MASCULINOS 2000'].values)
+                            int += 1
+
+                            if random_name_M not in recommended_names_in_brazilian_names:
+                                recommended_names_in_brazilian_names.append(random_name_M)
+                            else:
+                                continue
+                else: # Se o genero do nome principal for unissex
                     while len(recommended_names_in_brazilian_names) < 10:
                         if int == 0:
                             random_name_M = random.choice(popular_names['MASCULINOS 60'].values)
                         elif int == 1:
-                            random_name_M = random.choice(popular_names['MASCULINOS 70'].values)
+                            random_name_M = random.choice(popular_names['FEMININOS 70'].values)
                         elif int == 2:
                             random_name_M = random.choice(popular_names['MASCULINOS 80'].values)
                         elif int == 3:
-                            random_name_M = random.choice(popular_names['MASCULINOS 90'].values)
+                            random_name_M = random.choice(popular_names['FEMININOS 90'].values)
                         elif int >= 4:
                             random_name_M = random.choice(popular_names['MASCULINOS 2000'].values)
                         int += 1
@@ -92,33 +111,24 @@ class NewColdStart:
                             recommended_names_in_brazilian_names.append(random_name_M)
                         else:
                             continue
-            else: # Se o genero do nome principal for unissex
-                while len(recommended_names_in_brazilian_names) < 10:
-                    if int == 0:
-                        random_name_M = random.choice(popular_names['MASCULINOS 60'].values)
-                    elif int == 1:
-                        random_name_M = random.choice(popular_names['FEMININOS 70'].values)
-                    elif int == 2:
-                        random_name_M = random.choice(popular_names['MASCULINOS 80'].values)
-                    elif int == 3:
-                        random_name_M = random.choice(popular_names['FEMININOS 90'].values)
-                    elif int >= 4:
-                        random_name_M = random.choice(popular_names['MASCULINOS 2000'].values)
-                    int += 1
+                
+                # Atualizar no MongoDB colocando a lista de nomes recomendados na nova tabela de nomes
+                try:
+                    new_names.update_one(
+                        {"name": name},
+                        {"$set": {"recommendedNames": recommended_names_in_brazilian_names}},
+                        upsert=True
+                    )
+                except Exception as e:
+                    print(f"Erro ao atualizar o nome '{name}' no banco: {e}")  
 
-                    if random_name_M not in recommended_names_in_brazilian_names:
-                        recommended_names_in_brazilian_names.append(random_name_M)
-                    else:
-                        continue
-            
-            # Colocar a lista de nomes recomendados na nova tabela de nomes
-            selected_name = new_names.find_one({"name": name})
-            selected_name['recommendedNames'] = recommended_names_in_brazilian_names  
+                # Salvar os dados da nova busca fria em um arquivo JSON
+                with open('new_cold_start.json', 'a', encoding="utf-8") as file:
+                    json.dump({name: recommended_names_in_brazilian_names}, file, ensure_ascii=False, indent=4)
+                    file.write('\n')
 
-            # Salvar os dados da nova busca fria em um arquivo JSON
-            with open('new_cold_start.json', 'a', encoding="utf-8") as file:
-                json.dump({name: recommended_names_in_brazilian_names}, file, ensure_ascii=False, indent=4)
-                file.write('\n')
+            except Exception as e:
+                    print(f"Erro ao processar a linha: {e}")
 
         # Fecha a conexão e o arquivo
         client.close()
@@ -140,26 +150,30 @@ class NewColdStart:
                 })
         
         for registro in names_withou_recs:
-            print("\nNomes Brasileiros\n")
+            try:
+                print("\nNomes Brasileiros\n")
 
-            # Preenchendo a lista de nomes recomendados com os nomes brasileiros aleatórios da coleção
-            while len(registro['recommendedNames']) < 10:
-                random_name = random.choice(all_names)
-                if random_name not in registro['recommendedNames']:
-                    registro['recommendedNames'].append(random_name)
-                else:
-                    continue
-                
-            # Atualize o documento no banco com os nomes recomendados
-            names.update_one(
-                {"_id": registro['_id']},
-                {"$set": {"recommendedNames": registro['recommendedNames']}}
-            )
+                # Preenchendo a lista de nomes recomendados com os nomes brasileiros aleatórios da coleção
+                while len(registro['recommendedNames']) < 10:
+                    random_name = random.choice(all_names)
+                    if random_name not in registro['recommendedNames']:
+                        registro['recommendedNames'].append(random_name)
+                    else:
+                        continue
+                    
+                # Atualize o documento no banco com os nomes recomendados
+                names.update_one(
+                    {"_id": registro['_id']},
+                    {"$set": {"recommendedNames": registro['recommendedNames']}}
+                )
 
-            # Salvar os dados da nova busca fria em um arquivo JSON
-            with open('new_cold_start.json', 'a', encoding="utf-8") as file:
-                json.dump({registro['name']: registro['recommendedNames']}, file, ensure_ascii=False, indent=4)
-                file.write('\n')
+                # Salvar os dados da nova busca fria em um arquivo JSON
+                with open('new_cold_start.json', 'a', encoding="utf-8") as file:
+                    json.dump({registro['name']: registro['recommendedNames']}, file, ensure_ascii=False, indent=4)
+                    file.write('\n')
+                    
+            except Exception as e:
+                    print(f"Erro ao processar o registro '{registro.get('name', 'N/A')}': {e}")
 
         # Fecha a conexão e o arquivo
         client.close()
