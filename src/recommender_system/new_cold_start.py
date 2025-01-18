@@ -26,8 +26,15 @@ class NewColdStart:
         popular_names = pd.read_csv('src/brazilian_names_processing/nomes_populares por_decada.csv')
 
         # Selecionando o array de nomes para refazer a busca fria
-        names_doc = names_collection.find({}, {"name": 1, "recommendedNames": 1, "gender": 1})
+        # names_doc = names_collection.find({}, {"name": 1, "recommendedNames": 1, "gender": 1})
 
+        start_name = "Abimaele"
+        end_name = "Tanila"
+        # Consulta com intervalo de nomes
+        names_doc = names_collection.find(
+            {"name": {"$gte": start_name, "$lte": end_name}},  # Filtro do intervalo
+            {"name": 1, "recommendedNames": 1, "gender": 1}   # Campos retornados
+        )
         
         # Percorrendo as linhas da coleção para depois percorrer o array de nomes recomendados
         for line in names_doc:
@@ -122,17 +129,17 @@ class NewColdStart:
                 except Exception as e:
                     print(f"Erro ao atualizar o nome '{name}' no banco: {e}")  
 
-                # Salvar os dados da nova busca fria em um arquivo JSON
-                with open('new_cold_start.json', 'a', encoding="utf-8") as file:
-                    json.dump({name: recommended_names_in_brazilian_names}, file, ensure_ascii=False, indent=4)
-                    file.write('\n')
+                # # Salvar os dados da nova busca fria em um arquivo JSON
+                # with open('new_cold_start.json', 'a', encoding="utf-8") as file:
+                #     json.dump({name: recommended_names_in_brazilian_names}, file, ensure_ascii=False, indent=4)
+                #     file.write('\n')
 
             except Exception as e:
                     print(f"Erro ao processar a linha: {e}")
 
         # Fecha a conexão e o arquivo
         client.close()
-        file.close()
+        #file.close()
 
     @classmethod
     def brazilian_names_cold_start(cls):
@@ -143,9 +150,9 @@ class NewColdStart:
         new_names = babynames_db['newNames']
 
         # Obtendo todos os nomes da tabela 'brazilianNames' como uma lista
-        all_names = [doc['name'] for doc in names.find({}, {"name": 1, "_id": 0})]
+        all_names = [doc['nome_x'] for doc in names.find({}, {"nome_x": 1, "_id": 0})]
 
-        names_withou_recs = names.find({
+        names_withou_recs = new_names.find({
                 "recommendedNames": { "$exists": True, "$not": { "$size": 10 } }
                 })
         
@@ -160,18 +167,22 @@ class NewColdStart:
                         registro['recommendedNames'].append(random_name)
                     else:
                         continue
-                    
-                # Atualize o documento no banco com os nomes recomendados
-                names.update_one(
-                    {"_id": registro['_id']},
-                    {"$set": {"recommendedNames": registro['recommendedNames']}}
-                )
+
+                # Atualizar no MongoDB colocando a lista de nomes recomendados na nova tabela de nomes
+                try:
+                    new_names.update_one(
+                        {"name": registro['name']},
+                        {"$set": {"recommendedNames": registro['recommendedNames']}},
+                        upsert=True
+                    )
+                except Exception as e:
+                    print(f"Erro ao atualizar o nome '{name}' no banco: {e}")  
 
                 # Salvar os dados da nova busca fria em um arquivo JSON
                 with open('new_cold_start.json', 'a', encoding="utf-8") as file:
                     json.dump({registro['name']: registro['recommendedNames']}, file, ensure_ascii=False, indent=4)
                     file.write('\n')
-                    
+
             except Exception as e:
                     print(f"Erro ao processar o registro '{registro.get('name', 'N/A')}': {e}")
 
@@ -181,5 +192,5 @@ class NewColdStart:
 
 
 NewColdStart.set_URI('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
-NewColdStart.process_collections()
+# NewColdStart.process_collections()
 NewColdStart.brazilian_names_cold_start()
