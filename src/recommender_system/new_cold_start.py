@@ -129,10 +129,10 @@ class NewColdStart:
                 except Exception as e:
                     print(f"Erro ao atualizar o nome '{name}' no banco: {e}")  
 
-                # # Salvar os dados da nova busca fria em um arquivo JSON
-                # with open('new_cold_start.json', 'a', encoding="utf-8") as file:
-                #     json.dump({name: recommended_names_in_brazilian_names}, file, ensure_ascii=False, indent=4)
-                #     file.write('\n')
+                # Salvar os dados da nova busca fria em um arquivo JSON
+                with open('new_cold_start.json', 'a', encoding="utf-8") as file:
+                    json.dump({name: recommended_names_in_brazilian_names}, file, ensure_ascii=False, indent=4)
+                    file.write('\n')
 
             except Exception as e:
                     print(f"Erro ao processar a linha: {e}")
