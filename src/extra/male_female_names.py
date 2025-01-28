@@ -22,19 +22,23 @@ class MaleFemaleNames:
         male_names_list = []
         female_names_list = []
 
-        for name in new_names.find():
-            if name['gender'] == 'M':
-                male_names_list.append(name['name'])
-            elif name['gender'] == 'F':
-                female_names_list.append(name['name'])
+        try:
+            for doc in new_names.find():
+                print(doc['name'])
+                if doc['gender'] == 'M':
+                    male_names_list.append(doc['name'])
+                elif doc['gender'] == 'F':
+                    female_names_list.append(doc['name'])
+        except Exception as e:
+            print(f"Erro ao processar os nomes: {e}")
 
         # Criando o arquivo .txt para os nomes masculinos
-        with open("nomes_masculinos.txt", "w", encoding="utf-8") as file_male:
+        with open("src/extra/nomes_masculinos.txt", "w", encoding="utf-8") as file_male:
             for nome in male_names_list:
                 file_male.write(f"{nome}\n")
 
         # Criando o arquivo .txt para os nomes femininos
-        with open("nomes_femininos.txt", "w", encoding="utf-8") as file_female:
+        with open("src/extra/nomes_femininos.txt", "w", encoding="utf-8") as file_female:
             for nome in female_names_list:
                 file_female.write(f"{nome}\n")
 
@@ -43,4 +47,4 @@ class MaleFemaleNames:
 
 
 MaleFemaleNames.set_URI('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
-# MaleFemaleNames.processing()
+MaleFemaleNames.processing()
