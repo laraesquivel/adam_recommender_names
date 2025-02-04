@@ -163,7 +163,7 @@ class NewColdStart:
                 # Preenchendo a lista de nomes recomendados com os nomes brasileiros aleatórios da coleção
                 while len(registro['recommendedNames']) < 10:
                     random_name = random.choice(all_names)
-                    if random_name not in registro['recommendedNames']:
+                    if random_name not in registro['recommendedNames']: #ADICIONAR AQUI O GÊNERO IGUAAAAAL
                         registro['recommendedNames'].append(random_name)
                     else:
                         continue
