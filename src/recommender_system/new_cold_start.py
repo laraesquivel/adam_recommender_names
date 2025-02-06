@@ -200,8 +200,6 @@ class NewColdStart:
         babynames_db = client['babynames']
 
         # Conecção com as coleções para serem processadas
-        names_collection = babynames_db['names']
-        brazilian_names_collection = babynames_db['brazilianNames']
         new_names = babynames_db['newNames']
 
         # Carregando o arquivo com os nomes mais populares por década
