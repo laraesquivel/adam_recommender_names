@@ -201,6 +201,7 @@ class NewColdStart:
 
         # Conecção com as coleções para serem processadas
         new_names = babynames_db['newNames']
+        brazilian_names_collection = babynames_db['brazilianNames']
 
         # Carregando o arquivo com os nomes mais populares por década
         popular_names = pd.read_csv('src/brazilian_names_processing/nomes_populares por_decada.csv')
@@ -224,14 +225,14 @@ class NewColdStart:
 
                 for recomended_name in recommended_names:
 
-                    # Buscando o nome recomendado na coleção de nomes geral
-                    recommended_name_doc = new_names.find_one({"name": recomended_name}) #MUDAR AQUI PARA VERIFICAR NA DE NOMES BRASILEIROS
+                    # Buscando o nome recomendado na coleção de nomes brasileiros
+                    brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": recomended_name}) #MUDAR AQUI PARA VERIFICAR NA DE NOMES BRASILEIROS
 
                     # Se o nome for encontrado, ele é adicionado na nova recomendação da busca fria
-                    if recommended_name_doc is not None:
+                    if brazilian_name_doc is not None:
                         
-                        # Verificando se o gênero do nome recomendado é igual ao gênero do nome principal
-                        if recommended_name_doc.get('gender') == genero or genero == 'U':
+                        # Verificando se o gênero do nome recomendado é igual ao gênero do nome principal e se o nome brasileiro está na tabela newNames
+                        if brazilian_name_doc.get('gender') == genero or genero == 'U' and new_names.find_one({"name": recomended_name}) is not None:
                             new_rec_names.append(recomended_name)
 
                 # Preencher as listas de nomes recomendados que faltam nomes com a lista de nomes mais populares
