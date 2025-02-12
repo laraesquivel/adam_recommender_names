@@ -205,7 +205,14 @@ class NewColdStart:
         # Carregando o arquivo com os nomes mais populares por década
         popular_names = pd.read_csv('src/brazilian_names_processing/nomes_populares por_decada.csv')
 
-        for name_doc in new_names.find():
+        start_name = "Aua"
+
+        names_exec_again = new_names.find(
+            {"name": {"$gte": start_name}},  # Filtro do intervalo
+            {"name": 1, "recommendedNames": 1, "gender": 1}   # Campos retornados
+        )
+        
+        for name_doc in names_exec_again:
             try:
                 name = name_doc.get('name') # nome principal
                 print(name)
@@ -218,7 +225,7 @@ class NewColdStart:
                 for recomended_name in recommended_names:
 
                     # Buscando o nome recomendado na coleção de nomes geral
-                    recommended_name_doc = new_names.find_one({"name": recomended_name})
+                    recommended_name_doc = new_names.find_one({"name": recomended_name}) #MUDAR AQUI PARA VERIFICAR NA DE NOMES BRASILEIROS
 
                     # Se o nome for encontrado, ele é adicionado na nova recomendação da busca fria
                     if recommended_name_doc is not None:
