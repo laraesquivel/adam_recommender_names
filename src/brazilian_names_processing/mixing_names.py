@@ -1,6 +1,7 @@
 from pymongo import MongoClient
 import random
 import json
+import requests
 
 class MixingNamesTables:
     URI = ""
@@ -69,57 +70,63 @@ class MixingNamesTables:
 
         # Adicionando os nomes (documentos) na nova coleção
 
+        try:
+            start_name = "Rosemeiry"
+            # Percorrendo toda a tabela de nomes antigos, verificando se o nome existe na tabela de nomes brasileiros e mesclando as informações das duas tabelas
+            for doc in names_collection.find({"name": {"$gte": start_name}}):
+                    name = doc.get('name')
+                    print(name)
+                    brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": name})
 
-        # Percorrendo toda a tabela de nomes antigos, verificando se o nome existe na tabela de nomes brasileiros e mesclando as informações das duas tabelas
-        for doc in names_collection.find():
-            name = doc.get('name')
-            brazilian_name_doc = brazilian_names_collection.find_one({"nome_x": name})
+                    if brazilian_name_doc is not None:
+                        new_names.insert_one({
+                            "name": name,
+                            "searchCount": doc.get('searchCount'),
+                            "femaleCount": doc.get('femaleCount'),
+                            "maleCount": doc.get('maleCount'),
+                            "origin": doc.get('origin'),
+                            "meaning": doc.get('meaning'),
+                            "brazilian_region": brazilian_name_doc.get('nome_regiao'),
+                            "gender": brazilian_name_doc.get('gender'),
+                            "quantity_births_until_2010": brazilian_name_doc.get('quantidade_nascimentos_ate_2010'),
+                            "recommendedNames": [],
+                        })
+                    else:
+                        new_names.insert_one({
+                            "name": name,
+                            "searchCount": doc.get('searchCount'),
+                            "femaleCount": doc.get('femaleCount'),
+                            "maleCount": doc.get('maleCount'),
+                            "origin": doc.get('origin'),
+                            "meaning": doc.get('meaning'),
+                            "brazilian_region": doc.get('brazilian_region'),
+                            "gender": doc.get('gender'),
+                            "quantity_births_until_2010": doc.get('quantity_births_until_2010'),
+                            "recommendedNames": [],
+                        })
 
-            if brazilian_name_doc is not None:
-                new_names.insert_one({
-                    "name": name,
-                    "searchCount": doc.get('searchCount'),
-                    "femaleCount": doc.get('femaleCount'),
-                    "maleCount": doc.get('maleCount'),
-                    "origin": doc.get('origin'),
-                    "meaning": doc.get('meaning'),
-                    "brazilian_region": brazilian_name_doc.get('nome_regiao'),
-                    "gender": brazilian_name_doc.get('gender'),
-                    "quantity_births_until_2010": brazilian_name_doc.get('quantidade_nascimentos_ate_2010'),
-                    "recommendedNames": [],
-                })
-            else:
-                new_names.insert_one({
-                    "name": name,
-                    "searchCount": doc.get('searchCount'),
-                    "femaleCount": doc.get('femaleCount'),
-                    "maleCount": doc.get('maleCount'),
-                    "origin": doc.get('origin'),
-                    "meaning": doc.get('meaning'),
-                    "brazilian_region": doc.get('brazilian_region'),
-                    "gender": doc.get('gender'),
-                    "quantity_births_until_2010": doc.get('quantity_births_until_2010'),
-                    "recommendedNames": [],
-                })
+            # Perorrendo a tabela de nomes brasileiros para acrescentar os nomes que não foram adicionados por não estarem na tabela de nomes antigos
+            print("Nomes brasileiros")
+            for br_doc in brazilian_names_collection.find():
+                    br_name = br_doc.get('nome_x')
+                    print(br_name)
+                    name_doc = names_collection.find_one({"name": br_name})
 
-        # Perorrendo a tabela de nomes brasileiros para acrescentar os nomes que não foram adicionados por não estarem na tabela de nomes antigos
-        for br_doc in brazilian_names_collection.find():
-            br_name = br_doc.get('nome_x')
-            name_doc = names_collection.find_one({"name": br_name})
-
-            if name_doc is None:
-                new_names.insert_one({
-                    "name": br_name,
-                    "searchCount": 0,
-                    "femaleCount": 0,
-                    "maleCount": 0,
-                    "origin": "",
-                    "meaning": "",
-                    "brazilian_region": br_doc.get('nome_regiao'),
-                    "gender": br_doc.get('gender'),
-                    "quantity_births_until_2010": br_doc.get('quantidade_nascimentos_ate_2010'),
-                    "recommendedNames": [],
-                })
+                    if name_doc is None:
+                        new_names.insert_one({
+                            "name": br_name,
+                            "searchCount": 0,
+                            "femaleCount": 0,
+                            "maleCount": 0,
+                            "origin": "",
+                            "meaning": "",
+                            "brazilian_region": br_doc.get('nome_regiao'),
+                            "gender": br_doc.get('gender'),
+                            "quantity_births_until_2010": br_doc.get('quantidade_nascimentos_ate_2010'),
+                            "recommendedNames": [],
+                        })
+        except requests.exceptions.RequestException as e:
+            print(f"Erro: {e}")
 
         # Feche a conexão
         client.close()
@@ -127,4 +134,4 @@ class MixingNamesTables:
 MixingNamesTables.set_URI('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
 
 #MixingNamesTables.process_collections()
-MixingNamesTables.join_collections() #outra função para só exexutar o comando de juntar as tabelas e não fazer tudo de novo
+#MixingNamesTables.join_collections() #outra função para só exexutar o comando de juntar as tabelas e não fazer tudo de novo
