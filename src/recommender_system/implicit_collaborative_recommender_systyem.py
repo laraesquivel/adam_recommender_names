@@ -82,7 +82,7 @@ class ImplicitCollaborativeRecommenderSystem:
                 names_db.update_one({'name' : name_to_up}, {'$set' : {'recommendedNames' : sorted_names}})
 
 
-a = ImplicitCollaborativeRecommenderSystem()
+a = ImplicitCollaborativeRecommenderSystem('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
 a.implict_collaborative_recommender_system()
 a.update_recs()
 
