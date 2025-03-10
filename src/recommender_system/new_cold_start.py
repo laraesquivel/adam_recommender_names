@@ -206,14 +206,14 @@ class NewColdStart:
         # Carregando o arquivo com os nomes mais populares por década
         popular_names = pd.read_csv('src/brazilian_names_processing/nomes_populares por_decada.csv')
 
-        # start_name = "Wellma"
+        start_name = "Gilsilei"
 
-        # names_exec_again = new_names.find(
-        #     {"name": {"$gte": start_name}},  # Filtro do intervalo
-        #     {"name": 1, "recommendedNames": 1, "gender": 1}   # Campos retornados
-        # )
+        names_exec_again = new_names.find(
+            {"name": {"$gte": start_name}},  # Filtro do intervalo
+            {"name": 1, "recommendedNames": 1, "gender": 1}   # Campos retornados
+        )
         
-        for name_doc in new_names.find():
+        for name_doc in names_exec_again:
             try:
                 name = name_doc.get('name') # nome principal
                 print(name)
