@@ -59,7 +59,7 @@ class ImplicitCollaborativeRecommenderSystem:
     @classmethod
     def update_recs(cls):
         db = MongoClient(cls.URI)
-        names_db = db.get_database('babynames').get_collection('names')
+        names_db = db.get_database('babynames').get_collection('newNames')
 
 
         for name_to_up, recs_list in cls.names_to_update.items():
