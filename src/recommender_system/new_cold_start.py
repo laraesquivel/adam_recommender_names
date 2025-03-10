@@ -206,7 +206,7 @@ class NewColdStart:
         # Carregando o arquivo com os nomes mais populares por década
         popular_names = pd.read_csv('src/brazilian_names_processing/nomes_populares por_decada.csv')
 
-        start_name = "Sandrelena"
+        start_name = "Gilsilei"
 
         names_exec_again = new_names.find(
             {"name": {"$gte": start_name}},  # Filtro do intervalo
@@ -231,8 +231,8 @@ class NewColdStart:
                     # Se o nome for encontrado, ele é adicionado na nova recomendação da busca fria
                     if brazilian_name_doc is not None:
                         
-                        # Verificando se o gênero do nome recomendado é igual ao gênero do nome principal e se o nome brasileiro está na tabela newNames
-                        if brazilian_name_doc.get('gender') == genero or genero == 'U' and new_names.find_one({"name": recomended_name}) is not None:
+                        # Verificando se o gênero do nome recomendado é igual ao gênero do nome principal, se o nome brasileiro está na tabela newNames e se o nome não é igual ao nome principal
+                        if brazilian_name_doc.get('gender') == genero or genero == 'U' and new_names.find_one({"name": recomended_name}) is not None and recomended_name != name:
                             new_rec_names.append(recomended_name)
 
                 # Preencher as listas de nomes recomendados que faltam nomes com a lista de nomes mais populares
@@ -241,8 +241,8 @@ class NewColdStart:
                         random_name_F = random.choice(popular_names['FEMININOS'].values)
                         name_check = new_names.find_one({"name": random_name_F})
 
-                        # Se o nome não estiver na lista de nomes recomendados e estiver na coleção de nomes
-                        if random_name_F not in new_rec_names and name_check is not None:
+                        # Se o nome não estiver na lista de nomes recomendados, estiver na coleção de nomes e não for igual ao nome principal
+                        if random_name_F not in new_rec_names and name_check is not None and random_name_F != name:
                             new_rec_names.append(random_name_F)
                         else:
                             continue
@@ -251,7 +251,7 @@ class NewColdStart:
                         random_name_M = random.choice(popular_names['MASCULINOS'].values)
                         name_check = new_names.find_one({"name": random_name_M})
 
-                        if random_name_M not in new_rec_names and name_check is not None:
+                        if random_name_M not in new_rec_names and name_check is not None and random_name_M != name:
                             new_rec_names.append(random_name_M)
                         else:
                             continue
@@ -266,7 +266,7 @@ class NewColdStart:
                         
                         name_check = new_names.find_one({"name": random_name_U})
 
-                        if random_name_U not in new_rec_names and name_check is not None:
+                        if random_name_U not in new_rec_names and name_check is not None and random_name_U != name:
                             new_rec_names.append(random_name_U)
                         else:
                             continue
@@ -283,7 +283,7 @@ class NewColdStart:
                     print(f"Erro ao atualizar o nome '{name}' no banco: {e}")
 
                 # Salvar os dados da nova busca fria em um arquivo JSON
-                with open('cold_start.json', 'a', encoding="utf-8") as file:
+                with open('cold_start_2.json', 'a', encoding="utf-8") as file:
                     json.dump({name: new_rec_names}, file, ensure_ascii=False, indent=4)
                     file.write('\n')
 
