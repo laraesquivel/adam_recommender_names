@@ -82,7 +82,7 @@ class ImplicitCollaborativeRecommenderSystem:
                 names_db.update_one({'name' : name_to_up}, {'$set' : {'recommendedNames' : sorted_names}})
 
 
-#a = ImplicitCollaborativeRecommenderSystem()
-#a.implict_collaborative_recommender_system()
-#a.update_recs()
+a = ImplicitCollaborativeRecommenderSystem()
+a.implict_collaborative_recommender_system()
+a.update_recs()
 
