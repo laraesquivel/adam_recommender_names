@@ -53,8 +53,9 @@ class ImplicitCollaborativeRecommenderSystem:
                         names[nr_action] = 0
                     names[n_action] += peso
                     names[nr_action] +=peso
-
+                    
             cls.names_to_update[name] = names
+        print(cls.names_to_update)
     
     @classmethod
     def update_recs(cls):
@@ -84,5 +85,5 @@ class ImplicitCollaborativeRecommenderSystem:
 
 a = ImplicitCollaborativeRecommenderSystem('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
 a.implict_collaborative_recommender_system()
-a.update_recs()
+#a.update_recs()
 
