@@ -17,7 +17,7 @@ class UserGenerate:
         babynames = client['babynames']
         users = babynames['users']
         actions = babynames['actions']
-        names = babynames['names']
+        names = babynames['newNames']
         location = babynames['location']
 
         for user in users.find({}):
