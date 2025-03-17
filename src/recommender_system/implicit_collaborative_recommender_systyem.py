@@ -47,7 +47,7 @@ class ImplicitCollaborativeRecommenderSystem:
                 for actions_of_u in actions_of_user_u:
                     n_action = actions_of_u['name']
                     nr_action = actions_of_u['relationalName']
-                    if n_action not in names:
+                    if n_action not in names: #Se o nome não estiver no dicionário, adiciona
                         names[n_action] = 0
                     if nr_action not in names:
                         names[nr_action] = 0
