@@ -36,11 +36,13 @@ class ImplicitCollaborativeRecommenderSystem:
             # Buscar o gênero do nome principal
             name_data = names_db.find_one({'name': name})
             main_gender = name_data['gender'] if name_data else None
+            print(main_gender)
+            #print(main_gender)
         
             usuarios = {} # usuario : peso
             this_name_actions.sort(key=lambda doc:doc['userId']) #ordena
             grouped_actionsby_users_for_this_name = groupby(this_name_actions, key=lambda doc : doc['userId'])
-            print("chegou aq")
+
             for key, docs in grouped_actionsby_users_for_this_name: #Numero de interacoes do usuario u com o nome n
                 usuarios[key] = 0
                 for doc in docs:
@@ -63,13 +65,26 @@ class ImplicitCollaborativeRecommenderSystem:
                     nr_action_gender = nr_action_data['gender'] if nr_action_data else None
 
                     # Filtrar os nomes que têm o mesmo gênero ou são unissex
-                    if main_gender:
-                        if n_action_gender in [main_gender, "U"]:
-                            names[n_action] = names.get(n_action, 0) + peso
-                        if nr_action_gender in [main_gender, "U"]:
-                            names[nr_action] = names.get(nr_action, 0) + peso
-                    
+                    if main_gender and main_gender != "U":
+                        if n_action_gender == main_gender or n_action_gender == "U": #Se o nome não estiver no dicionário, adiciona
+                            if n_action not in names:
+                                names[n_action] = 0
+                            names[n_action] += peso
+                        if nr_action_gender == main_gender or nr_action_gender == "U":
+                            if nr_action not in names:
+                                names[nr_action] = 0
+                            names[nr_action] += peso
+                    else:                        
+                        if n_action not in names: #Se o nome não estiver no dicionário, adiciona
+                            names[n_action] = 0
+                        if nr_action not in names:
+                            names[nr_action] = 0
+                        names[n_action] += peso
+                        names[nr_action] +=peso
+                        
+                        
             cls.names_to_update[name] = names
+            print(names)
         print(cls.names_to_update)
     
     @classmethod
