@@ -21,10 +21,12 @@ class UserGenerate:
         location = babynames['location']
 
         for user in users.find({}):
-            print(user)
-            u = ObjectId(user['_id'])
+            u = str(user['_id'])
+            #print("Usuário:", u)
 
             this_user_actions = actions.find({'userId' : u})
+            #print("Total de ações encontradas:", actions.count_documents({'userId': u}))
+
             G = {}
             R = {}
             O = {}
@@ -33,8 +35,8 @@ class UserGenerate:
                 names_reg = names.find_one({'name' : action['name'], 'origin' : {'$exists' : True}})
                 o = None
                 g = None
-                print('oe')
-                print(names_reg)
+                #print(action['name'])
+                #print(names_reg['origin'])
                 if names_reg:
                     o = names_reg['origin']
                     g = names_reg['gender']
@@ -46,22 +48,27 @@ class UserGenerate:
                 
 
                 location_reg = location.find_one({'_id' : action['location']})
+                #print(action['location'])
+
                 if location_reg:
                     if not location_reg['region'] in R:
-                        R[location_reg['region']] =0
+                        R[location_reg['region']] = 0
                     
                     R[location_reg['region']] = R[location_reg['region']] + 1
                 if o:
                     if not o in O:
                         O[o] = 0
                     O[o] = O[o] + 1
-            bins_list = cls.binarization(G, R,O)
+                    
+            bins_list = cls.binarization(G, R, O)
+            print(G, R, O)
             users.update_one({'_id':user['_id']},{'$set': {'preferences' : {
                 'gender' : G,
                 'region' : R,
                 'origin' : O
             },
             'assignature' : bins_list} })
+            print(bins_list)
 
 
         
@@ -97,4 +104,6 @@ class UserGenerate:
     @classmethod
     def set_uri(cls,URI):
         cls.URI = URI
-    
+
+UserGenerate.set_uri('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
+UserGenerate.user_generation()
