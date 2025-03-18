@@ -21,6 +21,8 @@ class ImplicitCollaborativeRecommenderSystem:
         db = MongoClient(cls.URI)
         actions_db = db.get_database('babynames').get_collection('actions')
         actions = actions_db.find({'relationalName' : {'$exists' : True}})
+        
+        names_db = db.get_database('babynames').get_collection('newNames')
 
         names_list = set({}) #nomes a sofrerem alteracoes 
         for action in actions:
@@ -30,11 +32,15 @@ class ImplicitCollaborativeRecommenderSystem:
         #Percorre a lista dos nomes
         for name in names_list:
             this_name_actions = list(actions_db.find({'$or' : [{'name' : name}, {'relationalName' : name}], 'userId' : {'$ne' : None}}))#todas as interações com o nome n
-
+            
+            # Buscar o gênero do nome principal
+            name_data = names_db.find_one({'name': name})
+            main_gender = name_data['gender'] if name_data else None
+        
             usuarios = {} # usuario : peso
             this_name_actions.sort(key=lambda doc:doc['userId']) #ordena
             grouped_actionsby_users_for_this_name = groupby(this_name_actions, key=lambda doc : doc['userId'])
-
+            print("chegou aq")
             for key, docs in grouped_actionsby_users_for_this_name: #Numero de interacoes do usuario u com o nome n
                 usuarios[key] = 0
                 for doc in docs:
@@ -44,15 +50,24 @@ class ImplicitCollaborativeRecommenderSystem:
             names = {}
             for user, peso in usuarios: #Obs: Considerar um único nome, ou mais de um nome?
                 actions_of_user_u = actions_db.find({'userId' : user, 'relationalName' : {'$exists' : True}})
+                
                 for actions_of_u in actions_of_user_u:
                     n_action = actions_of_u['name']
                     nr_action = actions_of_u['relationalName']
-                    if n_action not in names: #Se o nome não estiver no dicionário, adiciona
-                        names[n_action] = 0
-                    if nr_action not in names:
-                        names[nr_action] = 0
-                    names[n_action] += peso
-                    names[nr_action] +=peso
+
+                    # Buscar os gêneros dos nomes recomendados
+                    n_action_data = names_db.find_one({'name': n_action})
+                    nr_action_data = names_db.find_one({'name': nr_action})
+
+                    n_action_gender = n_action_data['gender'] if n_action_data else None
+                    nr_action_gender = nr_action_data['gender'] if nr_action_data else None
+
+                    # Filtrar os nomes que têm o mesmo gênero ou são unissex
+                    if main_gender:
+                        if n_action_gender in [main_gender, "U"]:
+                            names[n_action] = names.get(n_action, 0) + peso
+                        if nr_action_gender in [main_gender, "U"]:
+                            names[nr_action] = names.get(nr_action, 0) + peso
                     
             cls.names_to_update[name] = names
         print(cls.names_to_update)
@@ -85,5 +100,5 @@ class ImplicitCollaborativeRecommenderSystem:
 
 a = ImplicitCollaborativeRecommenderSystem('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
 a.implict_collaborative_recommender_system()
-#a.update_recs()
+a.update_recs()
 
