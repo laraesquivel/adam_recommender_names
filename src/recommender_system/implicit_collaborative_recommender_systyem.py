@@ -99,15 +99,15 @@ class ImplicitCollaborativeRecommenderSystem:
                 actual_recs = reg['recommendedNames']
                 recs_list.pop(name_to_up, None)
                 recs_list.pop(None, None)
-                sorted_names = [item[0] for item in sorted(recs_list.items(), key= lambda item : item[1], reverse=True)]
-                #sorted_names2 = set(sorted_names)
-                for old_name in actual_recs:
-                    if not old_name in sorted_names:
-                        sorted_names.append(old_name)
-                if name_to_up in sorted_names:
-                    sorted_names.remove(name_to_up)
+                sorted_names = {item[0] for item in sorted(recs_list.items(), key=lambda item : item[1], reverse=True)}
+                
+                # Adicionar recomendações antigas sem criar duplicatas
+                sorted_names.update(actual_recs)
 
-                sorted_names =  sorted_names[:10]
+                # Remover novamente o próprio nome, caso tenha entrado na atualização
+                sorted_names.discard(name_to_up)
+
+                sorted_names = list(sorted_names)[:10]
                 print(name_to_up)
                 print(sorted_names)
                 names_db.update_one({'name' : name_to_up}, {'$set' : {'recommendedNames' : sorted_names}})
