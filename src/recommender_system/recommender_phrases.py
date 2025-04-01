@@ -11,9 +11,23 @@ class Phrases_Recommender_System:
         babynames = client['babynames']
         users = babynames['users']
         phrases = babynames['phrases']
+        print('Connected to MongoDB')
+        
+        try:
+            client.admin.command('ping')  # Testa a conexão
+            print("Conectado ao MongoDB!")
+
+            for user in users.find({}):  # Tenta executar a consulta
+                print(user)
+
+        except Exception as e:
+            print(f"Erro: {e}")
+
 
         
-        for user in users.find({}):
+        for user in users.find({"userId" : {'$exists' : True}, "assignature" : {'$exists' : True}, "phrases" : {'$exists' : False}}):
+            print(user)
+            # Get all phrases for this user
             this_user_phrases = []
             for phrase in phrases.find({}):
                 if phrase['assignature'] == user['assignature']:
@@ -27,3 +41,5 @@ class Phrases_Recommender_System:
         cls.URI = URI
 
 
+Phrases_Recommender_System.set_uri('mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/')
+Phrases_Recommender_System.generate_recommeder()
