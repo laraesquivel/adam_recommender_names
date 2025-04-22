@@ -37,7 +37,6 @@ class ImplicitCollaborativeRecommenderSystem:
             name_data = names_db.find_one({'name': name})
             main_gender = name_data['gender'] if name_data else None
             print(main_gender)
-            #print(main_gender)
         
             usuarios = {} # usuario : peso
             this_name_actions.sort(key=lambda doc:doc['userId']) #ordena
