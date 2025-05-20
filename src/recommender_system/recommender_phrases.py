@@ -1,5 +1,7 @@
 from pymongo import MongoClient
 
+# RECOMENDAÇAO DE FRASES (RODAR SEMPRE PARA NOVOS USÁRIOS CRIADOS)
+
 class Phrases_Recommender_System:
     URI =''
     def __init__(self) -> None:

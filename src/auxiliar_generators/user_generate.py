@@ -1,6 +1,9 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
+# GERANDO NOVOS USUÁRIOS (RODAR SEMPRE PARA NOVOS USÁRIOS CRIADOS, 
+# POIS AS ASSINATURAS E PREFERENCIAS NAO GERAM DE PRIMEIRA)
+
 class UserGenerate:
     URI = ''
     ALL_ORIGIN = ["Alemã", "Árabe", "Espanhola", "Francesa", "Grega", "Hebraica", "Indígena", "Inglesa", "Japonesa", "Lusitana"]
