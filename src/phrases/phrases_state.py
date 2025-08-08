@@ -188,5 +188,5 @@ class Phrases_State:
                     )
 
 
-Phrases_State.cold_start_phrases()
-#Phrases_State.workflow()
+#Phrases_State.cold_start_phrases()
+Phrases_State.workflow()

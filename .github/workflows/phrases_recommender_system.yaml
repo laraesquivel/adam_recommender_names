@@ -2,7 +2,7 @@ name: Phrases Recommender System
 
 on: 
   schedule:
-    - cron: '0 0 * * 5'  # Executa todas as segundas-feiras às 00:00 UTC
+    - cron: '0 * * * *'  # Executa a cada hora
   workflow_dispatch:
 
 jobs:
@@ -27,4 +27,6 @@ jobs:
       env:
         URI: ${{ secrets.MONGO_DB_BABYNAMES_SECRET }}
       run: |
+        python src/index_names_phrases.py  # Substitua com o comando para executar sua função
         python src/index_phrases.py  # Substitua com o comando para executar sua função
+        
