@@ -1,7 +1,13 @@
 from pymongo import MongoClient
 from collections import Counter
 from datetime import datetime, timedelta
-from pipelines import get_region, get_region_origin, get_origins
+try:
+    from pipelines import get_region, get_region_origin, get_origins
+except ModuleNotFoundError:
+    import sys
+    import os
+    sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+    from pipelines import get_region, get_region_origin, get_origins
 
 class Phrases_State:
     URI = 'mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/'
