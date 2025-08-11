@@ -1,12 +1,7 @@
 from pymongo import MongoClient
 from collections import Counter
 from datetime import datetime, timedelta
-
-# Importação mais robusta que funciona tanto localmente quanto no GitHub Actions
-try:
-    from .pipelines import get_region, get_region_origin, get_origins
-except ImportError:
-    from pipelines import get_region, get_region_origin, get_origins
+from .pipelines import get_region, get_region_origin, get_origins
 
 class Phrases_State:
     URI = 'mongodb+srv://laraesquivel:OVyyiX5pIMj4vthh@babys.iuiuuvp.mongodb.net/'

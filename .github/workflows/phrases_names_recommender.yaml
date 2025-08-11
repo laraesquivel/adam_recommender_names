@@ -37,5 +37,4 @@ jobs:
       env:
         URI: ${{ secrets.MONGO_DB_BABYNAMES_SECRET }}
       run: |
-        cd src
-        python index_names_phrases.py  # Substitua com o comando para executar sua função
+        python -m src.index_names_phrases
