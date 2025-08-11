@@ -1,3 +1,3 @@
-from src.phrases.phrases_state import Phrases_State
+from phrases import phrases_state
 
-Phrases_State.workflow()
+phrases_state.Phrases_State.workflow()
