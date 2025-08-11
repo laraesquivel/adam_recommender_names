@@ -25,7 +25,7 @@ jobs:
 
     - name: Set PYTHONPATH
       run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
-        
+
     - name: Executar função
       env:
         URI: ${{ secrets.MONGO_DB_BABYNAMES_SECRET }}
