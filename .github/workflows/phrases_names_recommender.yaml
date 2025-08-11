@@ -25,9 +25,17 @@ jobs:
 
     - name: Set PYTHONPATH
       run: echo "PYTHONPATH=$PYTHONPATH:$(pwd)/src" >> $GITHUB_ENV
+      
+    - name: Verificar estrutura do projeto
+      run: |
+        echo "Estrutura do projeto:"
+        find src -name "*.py" | head -20
+        echo "Verificando arquivos de pipeline:"
+        ls -la src/phrases/pipelines/
         
     - name: Executar função
       env:
         URI: ${{ secrets.MONGO_DB_BABYNAMES_SECRET }}
       run: |
-        python src/index_names_phrases.py  # Substitua com o comando para executar sua função
+        cd src
+        python index_names_phrases.py  # Substitua com o comando para executar sua função

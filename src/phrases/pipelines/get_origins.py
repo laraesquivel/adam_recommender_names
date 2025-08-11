@@ -29,7 +29,7 @@ def pipeline(o, start=None,end=None):
     {
         "$project": {
             "_id": 0,
-            "relationalName": "$names_datails.name"
+            "relationalName": "$name_details.name"
         }
     }
       ]
