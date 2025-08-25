@@ -97,15 +97,19 @@ class Phrases_State:
                 names = Counter()
                 for action in results:
                     if 'name' in action:
-                        names[action['name']]+=1
+                        names[action['name']] += 1
                     if 'relationalName' in action:
                         names[action['relationalName']] += 1
                 top10 = [top_name[0] for top_name in names.most_common(10)]
+                if not top10:
+                    # Mantém os nomes anteriores
+                    previous = phrases.find_one({'Frase': doc['Frase']}).get('associedNames', [])
+                    top10 = previous
                 phrases.update_one(
-                    {'Frase' : doc['Frase']},
+                    {'Frase': doc['Frase']},
                     {
-                        '$set' : {
-                            'associedNames' : top10
+                        '$set': {
+                            'associedNames': top10
                         }
                     }
                 )
@@ -187,5 +191,5 @@ class Phrases_State:
                     )
 
 
-#Phrases_State.cold_start_phrases()
-Phrases_State.workflow()
+Phrases_State.cold_start_phrases()
+#Phrases_State.workflow()
