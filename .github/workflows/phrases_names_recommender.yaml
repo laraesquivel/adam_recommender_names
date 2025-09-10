@@ -2,7 +2,7 @@ name: Phrases Names Recommender System
 
 on: 
   schedule:
-    - cron: '0 * * * *'  # Executa a cada hora
+    - cron: '0 */3 * * *'  # Executa a cada 3 horas
   workflow_dispatch:
 
 jobs:
